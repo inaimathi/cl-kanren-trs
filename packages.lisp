@@ -22,10 +22,10 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(common-lisp:defpackage :kanren-trs
-  (:use :common-lisp)
+(defpackage :kanren-trs
+  (:use :cl)
+  (:import-from #:alexandria #:with-gensyms)
   (:export
-   #:defconst
 ;;;developer-interface
    #:unify #:walk* #:reify-subst
    ;;extenable generics
@@ -35,13 +35,12 @@
 ;;;user-interface
    #:else
    #:+succeed+ 
-   #:+fail+ #:run #:run* #:== 
-   #:fresh #:conde #:condi 
+   #:+fail+ #:jog #:run #:run* #:== 
+   #:fresh #:conde #:condi #:condu
    #:all #:alli #:conda 
-   #:condu
+
 ;;;lib-functions
    #:choice-case #:map-choice #:make-nary-relation
    #:permute-binary-relation #:make-binary-relation
-   #:permute-ternary-relation #:make-ternary-relation
-))
+   #:permute-ternary-relation #:make-ternary-relation))
 
