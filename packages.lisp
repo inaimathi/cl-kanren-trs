@@ -39,6 +39,11 @@
    #:fresh #:conde #:condi #:condu
    #:all #:alli #:conda 
 
+;;;basic queries
+   #:nullo #:conso #:caro #:cdro #:pairo #:eq-caro
+   #:listo #:membero #:appendo
+   #:brancho #:flatteno
+
 ;;;lib-functions
    #:choice-case #:map-choice #:make-nary-relation
    #:permute-binary-relation #:make-binary-relation

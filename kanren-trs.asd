@@ -27,4 +27,5 @@
   :components 
     ((:file "packages")
      (:file "kanren")
-     (:file "kanren-lib")))
+     (:file "kanren-lib")
+     (:file "basic-queries")))
