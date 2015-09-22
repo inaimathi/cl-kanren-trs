@@ -1,12 +1,12 @@
 ;;; Copyright 2008 Matthew Swank
 ;;;
-;;; Redistribution and use in source and binary forms, with or without 
+;;; Redistribution and use in source and binary forms, with or without
 ;;; modification, are permitted provided that the following conditions are met:
 ;;;
-;;;    1. Redistributions of source code must retain the above copyright 
+;;;    1. Redistributions of source code must retain the above copyright
 ;;; notice, this list of conditions and the following disclaimer.
-;;;    2. Redistributions in binary form must reproduce the above copyright 
-;;; notice, this list of conditions and the following disclaimer in the 
+;;;    2. Redistributions in binary form must reproduce the above copyright
+;;; notice, this list of conditions and the following disclaimer in the
 ;;; documentation and/or other materials provided with the distribution.
 ;;;
 ;;; THIS SOFTWARE IS PROVIDED BY THE FREEBSD PROJECT ``AS IS'' AND ANY EXPRESS
@@ -40,7 +40,7 @@
          '+succeed+)
         ((null (cdr goals))
          (car goals))
-        (t 
+        (t
 	 (with-gensyms (goal all-aux-subst)
 	   (let ((remaining-goals (cdr goals)))
 	     `(let ((,goal ,(car goals)))
@@ -54,7 +54,7 @@
 ;;;case statement for streams
 ;;;a stream is:
 ;;;  the empty-stream
-;;;  a choice --a two member struct with a head and a funcallable tail 
+;;;  a choice --a two member struct with a head and a funcallable tail
 ;;;  any other object --counts as a singleton stream
 ;;;
 (defmacro case-inf (expr on-zero ((a) &body on-one) ((ac f) &body on-choice))
@@ -101,13 +101,13 @@
 		     (funcall ,goal2 ,ifu-subst)
 		     ((,ifu-subst)
 		      (funcall ,goal1 ,ifu-subst))
-		     ((,ifu-subst ,fun) 
+		     ((,ifu-subst ,fun)
 		      (declare (ignore ,fun))
 		      (funcall ,goal1 ,ifu-subst)))))))
 
 ;; TODO - destructure in the arg line here
 (defmacro cond-aux (ifer &body clauses)
-  (if (null clauses) 
+  (if (null clauses)
       '+fail+
       (destructuring-bind ((&rest goals) &rest other-clauses) clauses
 	(if (null other-clauses)
@@ -123,14 +123,14 @@
   (with-gensyms (subst)
     `(let ((,var (id ',var)))
        (declare (ignorable ,var))
-       (map-inf 
+       (map-inf
 	#'(lambda (,subst)
 	    (reify (walk* ,var ,subst)))
 	(funcall (all ,@goals) +empty-subst+)))))
 
 (defmacro run (num (var) &body goals)
   (with-gensyms (gen res res?)
-    `(loop with ,gen = (jog (,var) ,@goals) 
+    `(loop with ,gen = (jog (,var) ,@goals)
 	for (,res ,res?) = (multiple-value-list (funcall ,gen))
 	,@(when num `(repeat ,num)) while ,res? collect ,res)))
 
@@ -143,6 +143,15 @@
        (let ,(loop for v in vars collect `(,v (id ',v)))
 	 (declare (ignorable ,@vars))
 	 (funcall (all ,@goals) ,subst)))))
+
+(defmacro project ((&rest vars) &body goals)
+  (with-gensyms (subst)
+    (let* ((let-clauses (loop for v in vars collect
+			     `(,v (walk* ,v ,subst)))))
+      `#'(lambda (,subst)
+	   (let ,let-clauses
+	     (declare (ignorable ,@vars))
+	     (funcall (all ,@goals) ,subst))))))
 
 (defmacro conde (&body clauses)
   `(cond-aux ife ,@clauses))
@@ -162,15 +171,15 @@
 (defmacro alli (&rest goals)
   `(all-aux #'bindi ,@goals))
 
-(defconst +empty-subst+ nil)                             
+(defconst +empty-subst+ nil)
 
 (defconst +empty-stream+ (cons nil nil))
 
-(defconst +succeed+ 
-  #'(lambda (subst) 
+(defconst +succeed+
+  #'(lambda (subst)
       (unit subst)))
 
-(defconst +fail+ 
+(defconst +fail+
   #'(lambda (subst)
       (declare (ignore subst))
       (mzero)))
@@ -181,7 +190,7 @@
 ;;;choice: (T * (_ -> stream) -> stream)
 ;;;
 (defstruct (choice (:constructor choice (head tail)))
-  (head) 
+  (head)
   (tail (constantly +empty-stream+) :type function))
 
 ;;;(A -> B) * stream -> generator
@@ -292,15 +301,15 @@
 (defun extend-subst (rhs lhs subst)
   (cons (cons rhs lhs) subst))
 
-(defun unify (v w subst) 
+(defun unify (v w subst)
   (let ((v (walk v subst))
         (w (walk w subst)))
-    (if (eq v w) 
+    (if (eq v w)
         subst
         (unify-impl v w subst))))
 
-#+ (or) 
-(defun unify (v w subst) 
+#+ (or)
+(defun unify (v w subst)
   (let ((v (walk v subst))
         (w (walk w subst)))
     (cond ((eq v w) subst)
@@ -369,7 +378,7 @@
             (t +fail+)))))
 
 (defgeneric walk-impl (val subst)
-  (:method (val subst) 
+  (:method (val subst)
     (declare (ignore subst))
     val)
   (:method ((val string) subst)
@@ -379,13 +388,13 @@
     (cons (walk* (car val) subst)
           (walk* (cdr val) subst)))
   (:method ((val vector) subst)
-    (map 'vector 
+    (map 'vector
          (lambda (val)
            (walk* val subst))
          val)))
 
 (defgeneric reify-subst-impl (val subst)
-  (:method (val subst) 
+  (:method (val subst)
     (declare (ignore val))
     subst)
   (:method ((val string) subst)

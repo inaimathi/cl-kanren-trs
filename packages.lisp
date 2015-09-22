@@ -28,16 +28,16 @@
   (:export
 ;;;developer-interface
    #:unify #:walk* #:reify-subst
-   ;;extenable generics
-   #:equivp #:unify-impl 
+   ;;extendable generics
+   #:equivp #:unify-impl
    #:walk-impl #:reify-subst-impl
-   
+
 ;;;user-interface
    #:else
-   #:+succeed+ 
-   #:+fail+ #:jog #:run #:run* #:== 
-   #:fresh #:conde #:condi #:condu
-   #:all #:alli #:conda 
+   #:+succeed+
+   #:+fail+ #:jog #:run #:run* #:==
+   #:fresh #:project #:conde #:condi #:condu
+   #:all #:alli #:conda
 
 ;;;basic queries
    #:nullo #:conso #:caro #:cdro #:pairo #:eq-caro
@@ -48,4 +48,3 @@
    #:choice-case #:map-choice #:make-nary-relation
    #:permute-binary-relation #:make-binary-relation
    #:permute-ternary-relation #:make-ternary-relation))
-
