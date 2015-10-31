@@ -35,7 +35,7 @@
 ;;;user-interface
    #:else
    #:+succeed+
-   #:+fail+ #:jog #:run #:run* #:==
+   #:+fail+ #:jog #:run #:run* #:== #:==-check
    #:fresh #:project #:conde #:condi #:condu
    #:all #:alli #:conda
 
@@ -47,4 +47,9 @@
 ;;;lib-functions
    #:choice-case #:map-choice #:make-nary-relation
    #:permute-binary-relation #:make-binary-relation
-   #:permute-ternary-relation #:make-ternary-relation))
+   #:permute-ternary-relation #:make-ternary-relation
+
+;;;others needed for tests
+   #:extend-subst
+   #:walk
+   #:id-p))

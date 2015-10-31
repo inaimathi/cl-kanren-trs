@@ -22,4 +22,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 (cl:defpackage :kanren-trs-test
-  (:use :cl :kanren-trs))
+  (:use
+   :cl
+   :alexandria
+   :kanren-trs))

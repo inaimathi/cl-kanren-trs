@@ -24,8 +24,9 @@
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
 (asdf:defsystem :kanren-trs-test
-    :components 
+    :components
     ((:file "packages")
      (:file "kanren-aux" :depends-on ("packages"))
      (:file "kanren-tests" :depends-on ("kanren-aux")))
-    :depends-on (:kanren-trs))
+    :depends-on (:alexandria
+		 :kanren-trs))
