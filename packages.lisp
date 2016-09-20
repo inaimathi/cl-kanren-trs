@@ -22,7 +22,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(defpackage :kanren-trs
+(defpackage :cl-kanren
   (:use :cl)
   (:import-from #:alexandria #:with-gensyms)
   (:export

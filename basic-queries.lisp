@@ -1,4 +1,4 @@
-(in-package :kanren-trs)
+(in-package :cl-kanren)
 
 ;; The absolute basics
 (defun nullo (object)
@@ -31,8 +31,8 @@
          (else +fail+)))
 
 (defun membero (x list)
-  (conde ((nullo list) +fail+) 
-         ((eq-caro list x) +succeed+) 
+  (conde ((nullo list) +fail+)
+         ((eq-caro list x) +succeed+)
          (else (fresh (d)
                  (cdro list d)
                  (membero x d)))))

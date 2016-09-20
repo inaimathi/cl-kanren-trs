@@ -21,7 +21,7 @@
 ;;; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
-(asdf:defsystem :kanren-trs
+(asdf:defsystem :cl-kanren
   :description "A minikanren implementation"
   :author "Matthew Swank"
   :license "BSD"

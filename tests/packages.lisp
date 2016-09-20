@@ -25,4 +25,4 @@
   (:use
    :cl
    :alexandria
-   :kanren-trs))
+   :cl-kanren))

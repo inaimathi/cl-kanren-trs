@@ -29,4 +29,4 @@
      (:file "kanren-aux" :depends-on ("packages"))
      (:file "kanren-tests" :depends-on ("kanren-aux")))
     :depends-on (:alexandria
-		 :kanren-trs))
+		 :cl-kanren))

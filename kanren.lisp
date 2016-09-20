@@ -21,7 +21,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package :kanren-trs)
+(in-package :cl-kanren)
 
 (defmacro defconst (name value &optional (documentation nil docp))
   (let ((global (intern (format nil "%%~A" (symbol-name name)))))
