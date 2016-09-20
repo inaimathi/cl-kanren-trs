@@ -22,9 +22,12 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 (asdf:defsystem :kanren-trs
+  :description "A minikanren implementation"
+  :author "Matthew Swank"
+  :license "BSD"
   :serial t
   :depends-on (#:alexandria)
-  :components 
+  :components
     ((:file "packages")
      (:file "kanren")
      (:file "kanren-lib")
