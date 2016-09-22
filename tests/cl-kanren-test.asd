@@ -23,7 +23,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(asdf:defsystem :kanren-trs-test
+(asdf:defsystem :cl-kanren-test
     :components
     ((:file "packages")
      (:file "kanren-aux" :depends-on ("packages"))
