@@ -21,5 +21,8 @@
 ;;; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
-(cl:defpackage :kanren-trs-test
-  (:use :cl :kanren-trs))
+(cl:defpackage :cl-kanren-test
+  (:use
+   :cl
+   :alexandria
+   :cl-kanren))

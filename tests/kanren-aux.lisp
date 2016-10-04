@@ -22,7 +22,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package :kanren-trs-test)
+(in-package :cl-kanren-test)
 
 ;;;chapter 1
 ;;1.56
@@ -32,48 +32,16 @@
          (else +fail+)))         ;this line is superfluous
 
 ;;;chapter 2
-;;2.9
-(defun caro (cons car)
-  (fresh (cdr)
-    (== (cons car cdr) cons)))
-
-;;2.16
-(defun cdro (cons cdr)
-  (fresh (car)
-    (== (cons car cdr) cons)))
-
-;;2.28
-(defun conso (car cdr cons)
-  (== (cons car cdr) cons))
-
-;;2.35
-(defun nullo (object)
-  (== '() object))
-
 ;;2.40
 (defun eqo (x y)
   (== x y))
 
-;;2.53
-(defun pairo (pair?)
-  (fresh (car cdr)
-    (conso car cdr pair?)))
-
 ;;;chapter 3
-;;3.5
-(defun listo (list)
-  (conde ((nullo list) +succeed+)
-         ((pairo list)
-          (fresh (d)
-            (cdro list d)
-            (listo d)))
-         (else +fail+)))
-
 ;;3.17
 (defun lolo (list)
   (conde ((nullo list) +succeed+)
          ;;these two fresh clauses could be consolidated into one
-         ((fresh (a) 
+         ((fresh (a)
             (caro list a)
             (listo a))
           (fresh (d)
@@ -92,7 +60,7 @@
   (fresh (x)
     (== `(,x ,x) s)))
 
-(setf (symbol-function 'twinso) #'twinso-1)
+(defun twinso (s) (twinso-1 s))
 
 ;;3.37
 (defun loto (list)
@@ -122,18 +90,6 @@
 (defun loto-1 (list)
   (listofo #'twinso list))
 
-;;3.54
-(defun eq-caro (list x)
-  (caro list x))
-
-;;3.54
-(defun membero (x list)
-  (conde ((nullo list) +fail+) 
-         ((eq-caro list x) +succeed+) 
-         (else (fresh (d)
-                 (cdro list d)
-                 (membero x d)))))
-
 ;;3.65
 (defun list-identity (list)
   (run nil (y)
@@ -147,7 +103,7 @@
                  (cdro list d)
                  (pmembero-0 x d)))))
 
-;;3.83 
+;;3.83
 (defun pmembero-1 (x list)
   (conde ((nullo list) +fail+)
          ((eq-caro list x) (cdro list '()))
@@ -156,11 +112,11 @@
                  (cdro list d)
                  (pmembero-1 x d)))))
 
-;;3.86 
+;;3.86
 (defun pmembero-2 (x list)
   (conde ((nullo list) +fail+)
          ((eq-caro list x) (cdro list '()))
-         ((eq-caro list x) 
+         ((eq-caro list x)
           (fresh (a d)
             (cdro list `(,a . ,d))))
          (else (fresh (d)
@@ -169,7 +125,7 @@
 
 ;;3.93
 (defun pmembero-3 (x list)
-  (conde ((eq-caro list x) 
+  (conde ((eq-caro list x)
           (fresh (a d)
             (cdro list `(,a . ,d))))
          ((eq-caro list x) (cdro list '()))
@@ -246,7 +202,7 @@
                  (appendo-2 d rest result)))))
 
 (setf (symbol-function 'appendo) #'appendo-2)
-                 
+
 (defun swappendo (list rest out)
   (conde (+succeed+ (fresh (a d result)
                       (conso a d list)
@@ -267,16 +223,6 @@
                  (caro x a)
                  (unwrapo-1 a out)))))
 
-(defun flatteno (list? out)
-  (conde ((nullo list?) (== '() out))
-         ((pairo list?)
-          (fresh (a d result-car result-cdr)
-            (conso a d list?)
-            (flatteno a result-car)
-            (flatteno d result-cdr)
-            (appendo result-car result-cdr out)))
-         (else (conso list? '() out))))
-
 (defun flattenrevo (list? out)
   (conde (+succeed+ (conso list? '() out))
          ((nullo list?) (== '() out))
@@ -294,15 +240,16 @@
            (else (anyo goal)))))
 
 ;;6.4
-(defconst +never+ (anyo +fail+))
+(define-constant +never+ (anyo +fail+) :test #'(lambda (a b) (declare (ignore a b)) t))
 
 ;;6.7
-(defconst +always+ (anyo +succeed+))
+(define-constant +always+ (anyo +succeed+) :test #'(lambda (a b) (declare (ignore a b)) t))
 
 ;;6.12
-(defconst +sal+ #'(lambda (goal)
-                    (conde (+succeed+ +succeed+)
-                           (else goal))))
+(define-constant +sal+ #'(lambda (goal)
+			   (conde (+succeed+ +succeed+)
+				  (else goal)))
+ :test  #'(lambda (a b) (declare (ignore a b)) t))
 
 ;;;chapter 7
 (defun bit-xoro (x y r)
@@ -382,37 +329,6 @@
 (defun -o (n m k)
   (+o m k n))
 
-;;;chapter 8
-
-
-;;;chapter 9 (just forms not already in the reference implementation)
-(defun ext-s-check (rhs lhs subst)
-  (cond ((occurs-check rhs lhs subst) +fail+)
-        (t (extend-subst rhs lhs subst))))
-
-(defun unify-check (v w subst) 
-  (let ((v (walk v subst))
-        (w (walk w subst)))
-    (cond ((eq v w) subst)
-          ((id-p v)
-           (ext-s-check v w subst))
-          ((id-p w)
-           (ext-s-check w v subst))
-          ((and (consp v) (consp w))
-           (let ((subst (unify-check (car v) (car w) subst)))
-             (if (not (eq subst +fail+))
-                 (unify-check (cdr v) (cdr w) subst)
-               +fail+)))
-          ((equal v w) subst)
-          (t +fail+))))
-
-(defun ==-check (v w)
-  #'(lambda (subst)
-      (let ((subst-1 (unify-check v w subst)))
-        (if (not (eq subst-1 +fail+))
-            (funcall +succeed+ subst-1)
-          (funcall +fail+ subst)))))
-
 ;;;chapter 10
 (defun not-pastao (x)
   (conda ((== 'pasta x) +fail+)
@@ -450,11 +366,3 @@
     (== `(,c . ,z) r) (poso z)
     (all (full-addero d a b c e)
          (addero e x y z))))
-
-
-        
-
-
-
-
-                 

@@ -1,4 +1,3 @@
-;;; -*- Mode: Lisp; Package: COMMON-LISP-USER -*-
 ;;; Copyright (c) 2008, Matthew Swank
 ;;; All rights reserved.
 ;;;
@@ -22,10 +21,14 @@
 ;;; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
-
-(asdf:defsystem :kanren-trs-test
-    :components 
+(asdf:defsystem :cl-kanren
+  :description "A minikanren implementation"
+  :author "Matthew Swank"
+  :license "BSD"
+  :serial t
+  :depends-on (#:alexandria)
+  :components
     ((:file "packages")
-     (:file "kanren-aux" :depends-on ("packages"))
-     (:file "kanren-tests" :depends-on ("kanren-aux")))
-    :depends-on (:kanren-trs))
+     (:file "kanren")
+     (:file "kanren-lib")
+     (:file "basic-queries")))

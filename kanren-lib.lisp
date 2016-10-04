@@ -22,7 +22,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package :kanren-trs)
+(in-package :cl-kanren)
 
 (defmacro choice-case (key-term &body cases)
   (let ((kt-name (gensym)))
@@ -32,7 +32,7 @@
                           (destructuring-bind (keys &rest clauses) case
                             (cond ((eql keys 'else)
                                    clauses)
-                                  ((consp keys) 
+                                  ((consp keys)
                                    (if (cdr keys)
                                        `((conde ,@(mapcar (lambda (key)
                                                         `(== ,kt-name ',key))
@@ -62,7 +62,7 @@
 (defun make-binary-relation (mapping)
   (lambda (a b)
     (map-choice (lambda (a1 b1)
-                  (fresh () 
+                  (fresh ()
                     (== a a1)
                     (== b b1)))
                 (mapcar #'first mapping)
@@ -70,8 +70,8 @@
 
 ;;this needs to confirm that compile time evaluation is possible:
 ;;mapping is a quoted list, n is a number, etc
-#+ (or) 
-(define-compiler-macro make-nary-relation (n mapping) 
+#+ (or)
+(define-compiler-macro make-nary-relation (n mapping)
   (let* ((maps (loop :for x :from 0 :below n
                   :collect `',(mapcar (lambda (list)
                                      (nth x list))
@@ -98,11 +98,11 @@
     (lambda (&rest args)
       (unless (= (length args) n)
         (error "invalid number of arguments"))
-      (apply #'map-choice 
+      (apply #'map-choice
              (lambda (&rest args1)
                (let ((sequence nil))
                  (map nil (lambda (a a1)
-                            (unless sequence 
+                            (unless sequence
                               (setf sequence (== a a1)))
                             ;; we don't want to capture the binding
                             ;; (this should be a fold)
@@ -125,7 +125,7 @@
 (defun make-ternary-relation (mapping)
   (lambda (a b c)
     (map-choice (lambda (a1 b1 c1)
-                  (fresh () 
+                  (fresh ()
                     (== a a1)
                     (== b b1)
                     (== c c1)))

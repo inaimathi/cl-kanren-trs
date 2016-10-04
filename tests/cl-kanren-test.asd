@@ -1,3 +1,4 @@
+;;; -*- Mode: Lisp; Package: COMMON-LISP-USER -*-
 ;;; Copyright (c) 2008, Matthew Swank
 ;;; All rights reserved.
 ;;;
@@ -21,11 +22,11 @@
 ;;; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
-(asdf:defsystem :kanren-trs
-  :serial t
-  :depends-on (#:alexandria)
-  :components 
+
+(asdf:defsystem :cl-kanren-test
+    :components
     ((:file "packages")
-     (:file "kanren")
-     (:file "kanren-lib")
-     (:file "basic-queries")))
+     (:file "kanren-aux" :depends-on ("packages"))
+     (:file "kanren-tests" :depends-on ("kanren-aux")))
+    :depends-on (:alexandria
+		 :cl-kanren))

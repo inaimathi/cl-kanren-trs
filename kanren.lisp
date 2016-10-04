@@ -21,7 +21,7 @@
 ;;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 ;;; THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package :kanren-trs)
+(in-package :cl-kanren)
 
 (defmacro defconst (name value &optional (documentation nil docp))
   (let ((global (intern (format nil "%%~A" (symbol-name name)))))
@@ -332,6 +332,45 @@
         (if (not (eq subst-1 +fail+))
             (funcall +succeed+ subst-1)
 	    (funcall +fail+ subst)))))
+
+
+;;;chapter 9 (just forms not already in the reference implementation)
+
+(defun occurs-check (x v subst)
+  (let ((v (walk v subst)))
+    (cond
+      ((id-p v) (eq v x))
+      ((consp v)
+       (or (occurs-check x (car v) subst)
+	   (occurs-check x (cdr v) subst)))
+      (t nil))))
+
+(defun ext-s-check (rhs lhs subst)
+  (cond ((occurs-check rhs lhs subst) +fail+)
+        (t (extend-subst rhs lhs subst))))
+
+(defun unify-check (v w subst)
+  (let ((v (walk v subst))
+        (w (walk w subst)))
+    (cond ((eq v w) subst)
+          ((id-p v)
+           (ext-s-check v w subst))
+          ((id-p w)
+           (ext-s-check w v subst))
+          ((and (consp v) (consp w))
+           (let ((subst (unify-check (car v) (car w) subst)))
+             (if (not (eq subst +fail+))
+                 (unify-check (cdr v) (cdr w) subst)
+               +fail+)))
+          ((equal v w) subst)
+          (t +fail+))))
+
+(defun ==-check (v w)
+  #'(lambda (subst)
+      (let ((subst-1 (unify-check v w subst)))
+        (if (not (eq subst-1 +fail+))
+            (funcall +succeed+ subst-1)
+          (funcall +fail+ subst)))))
 
 ;;;public interface to extend unification
 (defgeneric equivp (lhs rhs)
