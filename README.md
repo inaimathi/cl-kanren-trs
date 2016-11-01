@@ -1,6 +1,10 @@
 # cl-kanren-trs
 ###### An implementation of miniKanren in Common Lisp
 
+## OBSOLETE
+
+This fork is no longer maintained. Development has moved to [`cage2`'s fork](https://github.com/cage2/cl-kanren) instead.
+
 ### Usage
 
 Clone this repo into your `~/quicklisp/` folder, then run `(ql:quickload :kanren-trs)`
@@ -15,13 +19,13 @@ It is consequently released under the following BSD license:
 
 	;;; Copyright 2008 Matthew Swank
 	;;;
-	;;; Redistribution and use in source and binary forms, with or without 
+	;;; Redistribution and use in source and binary forms, with or without
 	;;; modification, are permitted provided that the following conditions are met:
 	;;;
-	;;;    1. Redistributions of source code must retain the above copyright 
+	;;;    1. Redistributions of source code must retain the above copyright
 	;;; notice, this list of conditions and the following disclaimer.
-	;;;    2. Redistributions in binary form must reproduce the above copyright 
-	;;; notice, this list of conditions and the following disclaimer in the 
+	;;;    2. Redistributions in binary form must reproduce the above copyright
+	;;; notice, this list of conditions and the following disclaimer in the
 	;;; documentation and/or other materials provided with the distribution.
 	;;;
 	;;; THIS SOFTWARE IS PROVIDED BY THE FREEBSD PROJECT ``AS IS'' AND ANY EXPRESS
